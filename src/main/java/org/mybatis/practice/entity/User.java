@@ -9,7 +9,17 @@ public class User {
     private String email;
     private String phone;
     private Boolean isLogin;
-    private Date createAt;
+    private Date createdAt;
+
+    public User() {
+    }
+
+    public User(String name, String password, String email, String phone) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+    }
 
     public Long getId() {
         return id;
@@ -59,11 +69,11 @@ public class User {
         isLogin = login;
     }
 
-    public Date getCreateAt() {
-        return createAt;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreateAt(Date createAt) {
-        this.createAt = createAt;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }

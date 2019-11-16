@@ -1,4 +1,4 @@
-package org.mybatis.practice.dao;
+package org.mybatis.practice.mapper;
 
 public interface ShoppingCartMapper {
 }

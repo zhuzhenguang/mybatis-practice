@@ -22,6 +22,10 @@ public class MybatisFactory {
         return new SqlSessionFactoryBuilder().build(inputStream);
     }
 
+    public static SqlSessionFactory getFactory() {
+        return factory;
+    }
+
     public static SqlSession getSession() {
         return factory.openSession();
     }
