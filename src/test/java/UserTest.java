@@ -22,10 +22,10 @@ public class UserTest extends TestBase {
                 "ming@sina.com",
                 "11111111111");
 
-        Long id = userDao.registerNewUser(user);
+        userDao.registerNewUser(user);
 
         User result = userDao.queryUser("Ming");
-        assertTrue(id > 0);
+        assertTrue(user.getId() > 0);
         assertEquals("Ming", result.getName());
         assertEquals("123", result.getPassword());
         assertEquals("ming@sina.com", result.getEmail());
@@ -57,13 +57,14 @@ public class UserTest extends TestBase {
     @Test
     public void user_should_login() {
         UserDao userDao = new UserDao();
-        Long userId = userDao.registerNewUser(new User(
+        User ming = new User(
                 "Ming",
                 "123",
                 "ming@sohu.com",
-                "11111111111"));
+                "11111111111");
+        userDao.registerNewUser(ming);
 
-        userDao.login(userId);
+        userDao.login(ming.getId());
 
         User result = userDao.queryUser("Ming");
         assertTrue(result.getLogin());
@@ -72,14 +73,15 @@ public class UserTest extends TestBase {
     @Test
     public void user_should_logout() {
         UserDao userDao = new UserDao();
-        Long userId = userDao.registerNewUser(new User(
+        User ming = new User(
                 "Ming",
                 "123",
                 "ming@sohu.com",
                 "11111111111",
-                true));
+                true);
+        userDao.registerNewUser(ming);
 
-        userDao.logout(userId);
+        userDao.logout(ming.getId());
 
         User result = userDao.queryUser("Ming");
         assertFalse(result.getLogin());
@@ -88,13 +90,14 @@ public class UserTest extends TestBase {
     @Test
     public void should_delete_user() {
         UserDao userDao = new UserDao();
-        Long userId = userDao.registerNewUser(new User(
+        User ming = new User(
                 "Ming",
                 "123",
                 "ming@sohu.com",
-                "11111111111"));
+                "11111111111");
+        userDao.registerNewUser(ming);
 
-        userDao.delete(userId);
+        userDao.delete(ming.getId());
 
         User result = userDao.queryUser("Ming");
         assertNull(result);

@@ -7,8 +7,8 @@ import org.mybatis.practice.mapper.UserMapper;
 
 import java.util.List;
 
-public class UserDao extends DaoBase {
-    public Long registerNewUser(User user) {
+public class UserDao {
+    public void registerNewUser(User user) {
         try (SqlSession session = MybatisFactory.getSession()) {
             UserMapper mapper = session.getMapper(UserMapper.class);
             if (mapper.queryByName(user.getName()) != null) {
@@ -16,7 +16,6 @@ public class UserDao extends DaoBase {
             }
             mapper.insert(user);
             session.commit();
-            return user.getId();
         }
     }
 

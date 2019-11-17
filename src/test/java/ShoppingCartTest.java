@@ -16,7 +16,7 @@ public class ShoppingCartTest extends TestBase {
     @Test
     public void should_add_a_product_to_shopping_cart() {
         Long userId = Login();
-        Long productId = inputFruit("苹果");
+        Long productId = initProduct("苹果");
         ShoppingCartDao shoppingCartDao = new ShoppingCartDao();
 
         shoppingCartDao.add(productId, userId, 2);
@@ -32,8 +32,8 @@ public class ShoppingCartTest extends TestBase {
     public void should_list_products_of_shopping_cart() {
         Long userId = Login();
         ShoppingCartDao shoppingCartDao = new ShoppingCartDao();
-        Long appleId = inputFruit("苹果");
-        Long bananaId = inputFruit("香蕉");
+        Long appleId = initProduct("苹果");
+        Long bananaId = initProduct("香蕉");
         shoppingCartDao.add(appleId, userId, 1);
         shoppingCartDao.add(bananaId, userId, 1);
 
@@ -62,7 +62,7 @@ public class ShoppingCartTest extends TestBase {
     @Test
     public void should_change_count_of_items_in_shopping_cart() {
         Long userId = Login();
-        Long productId = inputFruit("苹果");
+        Long productId = initProduct("苹果");
         ShoppingCartDao shoppingCartDao = new ShoppingCartDao();
         shoppingCartDao.add(productId, userId, 2);
         ShoppingCartItem itemToChange = shoppingCartDao.queryByUserId(userId).getItems().get(0);
@@ -76,7 +76,7 @@ public class ShoppingCartTest extends TestBase {
     @Test
     public void should_remove_item_from_shopping_cart() {
         Long userId = Login();
-        Long productId = inputFruit("苹果");
+        Long productId = initProduct("苹果");
         ShoppingCartDao shoppingCartDao = new ShoppingCartDao();
         shoppingCartDao.add(productId, userId, 2);
         ShoppingCartItem itemToDelete = shoppingCartDao.queryByUserId(userId).getItems().get(0);
@@ -89,15 +89,19 @@ public class ShoppingCartTest extends TestBase {
 
     private Long Login() {
         UserDao userDao = new UserDao();
-        return userDao.registerNewUser(new User(
+        User ming = new User(
                 "Ming",
                 "123",
                 "ming@sohu.com",
-                "11111111111", true));
+                "11111111111", true);
+        userDao.registerNewUser(ming);
+        return ming.getId();
     }
 
-    private Long inputFruit(String name) {
+    private Long initProduct(String name) {
         ProductDao productDao = new ProductDao();
-        return productDao.addNew(new Product("Food", name, 10, 1000));
+        Product food = new Product("Food", name, 10, 1000);
+        productDao.addNew(food);
+        return food.getId();
     }
 }

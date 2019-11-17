@@ -155,15 +155,19 @@ public class OrderTest extends TestBase {
 
     private Long Login() {
         UserDao userDao = new UserDao();
-        return userDao.registerNewUser(new User(
+        User ming = new User(
                 "Ming",
                 "123",
                 "ming@sohu.com",
-                "11111111111", true));
+                "11111111111", true);
+        userDao.registerNewUser(ming);
+        return ming.getId();
     }
 
     private Long inputProduct(String name) {
         ProductDao productDao = new ProductDao();
-        return productDao.addNew(new Product("Food", name, 10, 1000));
+        Product food = new Product("Food", name, 10, 1000);
+        productDao.addNew(food);
+        return food.getId();
     }
 }

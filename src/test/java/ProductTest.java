@@ -12,10 +12,10 @@ public class ProductTest extends TestBase {
         Product product = new Product("Food", "苹果", 10, 1000);
         ProductDao productDao = new ProductDao();
 
-        Long id = productDao.addNew(product);
+        productDao.addNew(product);
 
-        assertTrue(id > 0);
-        Product result = productDao.queryById(id);
+        assertTrue(product.getId() > 0);
+        Product result = productDao.queryById(product.getId());
         assertEquals("Food", result.getCategory());
         assertEquals("苹果", result.getName());
         assertEquals(Double.valueOf(10), result.getPrice());
@@ -47,11 +47,12 @@ public class ProductTest extends TestBase {
     @Test
     public void should_change_product() {
         ProductDao productDao = new ProductDao();
-        Long id = productDao.addNew(new Product("Food", "苹果", 10, 1000));
+        Product product = new Product("Food", "苹果", 10, 1000);
+        productDao.addNew(product);
 
-        productDao.change(new Product(id, "Food", "苹果", 20, 2000));
+        productDao.change(new Product(product.getId(), "Food", "苹果", 20, 2000));
 
-        Product result = productDao.queryById(id);
+        Product result = productDao.queryById(product.getId());
         assertEquals("Food", result.getCategory());
         assertEquals("苹果", result.getName());
         assertEquals(Double.valueOf(20), result.getPrice());
@@ -61,11 +62,12 @@ public class ProductTest extends TestBase {
     @Test
     public void should_delete_product() {
         ProductDao productDao = new ProductDao();
-        Long id = productDao.addNew(new Product("Food", "苹果", 10, 1000));
+        Product product = new Product("Food", "苹果", 10, 1000);
+        productDao.addNew(product);
 
-        productDao.delete(id);
+        productDao.delete(product.getId());
 
-        Product result = productDao.queryById(id);
+        Product result = productDao.queryById(product.getId());
         assertNull(result);
     }
 }

@@ -8,12 +8,11 @@ import org.mybatis.practice.mapper.ProductMapper;
 import java.util.List;
 
 public class ProductDao {
-    public Long addNew(Product product) {
+    public void addNew(Product product) {
         try (SqlSession session = MybatisFactory.getSession()) {
             ProductMapper mapper = session.getMapper(ProductMapper.class);
             mapper.insert(product);
             session.commit();
-            return product.getId();
         }
     }
 
