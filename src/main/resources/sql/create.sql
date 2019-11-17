@@ -12,7 +12,7 @@ create table order_items
     product_id bigint null,
     order_id bigint,
     count int,
-    created_at datetime default CURRENT_TIMESTAMP null
+    created_at timestamp default NOW() null
 );
 
 create table orders
@@ -21,7 +21,7 @@ create table orders
         primary key AUTO_INCREMENT,
     user_id bigint null,
     status varchar(255) null,
-    created_at datetime default CURRENT_TIMESTAMP null
+    created_at timestamp default NOW() null
 );
 
 create table products
@@ -32,7 +32,7 @@ create table products
     name varchar(255) charset utf8 null,
     price double null,
     storage int null,
-    created_at datetime default CURRENT_TIMESTAMP null
+    created_at timestamp default NOW() null
 );
 
 create table shopping_cart_items
@@ -42,7 +42,7 @@ create table shopping_cart_items
     count int null,
     product_id bigint null,
     shopping_cart_id bigint,
-    created_at datetime default CURRENT_TIMESTAMP null
+    created_at timestamp default NOW() null
 );
 
 create table shopping_carts
@@ -50,7 +50,7 @@ create table shopping_carts
     id bigint not null
         primary key AUTO_INCREMENT,
     user_id bigint null,
-    created_at datetime default CURRENT_TIMESTAMP null
+    created_at timestamp default NOW() null
 );
 
 create table users
@@ -62,7 +62,7 @@ create table users
     email varchar(255) null,
     phone varchar(11) null,
     is_login tinyint(1) default 0 null,
-    created_at datetime default CURRENT_TIMESTAMP null,
+    created_at timestamp default NOW() null,
     constraint name
         unique (name)
 );
