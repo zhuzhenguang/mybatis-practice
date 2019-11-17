@@ -8,4 +8,14 @@
         insert into products(category, name, price, storage)
         values (#{category}, #{name}, #{price}, #{storage})
     </insert>
+
+    <resultMap id="product" type="org.mybatis.practice.entity.Product">
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <select id="queryById" resultMap="product">
+        select *
+        from products
+        where id = #{id}
+    </select>
 </mapper>
