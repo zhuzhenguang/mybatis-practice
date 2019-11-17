@@ -10,6 +10,16 @@ public class Product {
     private Integer storage;
     private Date createdAt;
 
+    public Product() {
+    }
+
+    public Product(String category, String name, double price, int storage) {
+        this.category = category;
+        this.name = name;
+        this.price = price;
+        this.storage = storage;
+    }
+
     public Long getId() {
         return id;
     }
