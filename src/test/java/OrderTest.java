@@ -5,10 +5,9 @@ import org.mybatis.practice.dao.ShoppingCartDao;
 import org.mybatis.practice.dao.UserDao;
 import org.mybatis.practice.entity.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -28,7 +27,7 @@ public class OrderTest extends TestBase {
         Order result = orderDao.queryById(order.getId());
         assertEquals(OrderStatus.Unpaid, result.getStatus());
         assertNotNull(result.getCreatedAt());
-        assertEquals(Double.valueOf(10), result.totalPrice());
+        assertEquals(Double.valueOf(20), result.totalPrice());
         User user = result.getUser();
         assertEquals("Ming", user.getName());
         assertEquals(1, result.getItems().size());
@@ -43,7 +42,7 @@ public class OrderTest extends TestBase {
     public void should_calculate_total_price() {
         Long userId = Login();
         Long appleId = inputProduct("苹果");
-        Long bananaId = inputProduct("苹果");
+        Long bananaId = inputProduct("香蕉");
         Order order = new Order(userId);
         List<OrderItem> orderItems = Arrays.asList(new OrderItem(appleId, 2), new OrderItem(bananaId, 1));
 
@@ -52,6 +51,68 @@ public class OrderTest extends TestBase {
 
         Order result = orderDao.queryById(order.getId());
         assertEquals(Double.valueOf(30), result.totalPrice());
+    }
+
+    @Test
+    public void should_pay_order() {
+        OrderDao orderDao = new OrderDao();
+        Long userId = Login();
+        Long appleId = inputProduct("苹果");
+        Order order = new Order(userId);
+        orderDao.createOrder(order, Collections.singletonList(new OrderItem(appleId, 2)));
+
+        orderDao.pay(order.getId());
+
+        Order result = orderDao.queryById(order.getId());
+        assertEquals(OrderStatus.Paid, result.getStatus());
+    }
+
+    @Test
+    public void should_cancel_order() {
+        OrderDao orderDao = new OrderDao();
+        Long userId = Login();
+        Long appleId = inputProduct("苹果");
+        Order order = new Order(userId);
+        orderDao.createOrder(order, Collections.singletonList(new OrderItem(appleId, 2)));
+
+        orderDao.cancel(order.getId());
+
+        Order result = orderDao.queryById(order.getId());
+        assertEquals(OrderStatus.Canceled, result.getStatus());
+    }
+
+    @Test
+    public void should_cancel_order_when_not_paid_beyond_30_mins() {
+        OrderDao orderDao = new OrderDao();
+        Long userId = Login();
+        Long appleId = inputProduct("苹果");
+        Order order = new Order(userId);
+        order.setCreatedAt(createDateMinsAgo(31));
+        orderDao.createOrder(order, Collections.singletonList(new OrderItem(appleId, 2)));
+
+        orderDao.checkAndCancel(order.getId());
+
+        Order result = orderDao.queryById(order.getId());
+        assertEquals(OrderStatus.Canceled, result.getStatus());
+    }
+
+    @Test
+    public void should_not_cancel_order_when_not_paid_below_30_mins() {
+        OrderDao orderDao = new OrderDao();
+        Long userId = Login();
+        Long appleId = inputProduct("苹果");
+        Order order = new Order(userId);
+        order.setCreatedAt(createDateMinsAgo(29));
+        orderDao.createOrder(order, Collections.singletonList(new OrderItem(appleId, 2)));
+
+        orderDao.checkAndCancel(order.getId());
+
+        Order result = orderDao.queryById(order.getId());
+        assertEquals(OrderStatus.Unpaid, result.getStatus());
+    }
+
+    private Date createDateMinsAgo(int minutes) {
+        return Date.from(LocalDateTime.now().minusMinutes(minutes).atZone(ZoneId.systemDefault()).toInstant());
     }
 
     private Long Login() {
@@ -66,10 +127,5 @@ public class OrderTest extends TestBase {
     private Long inputProduct(String name) {
         ProductDao productDao = new ProductDao();
         return productDao.addNew(new Product("Food", name, 10, 1000));
-    }
-
-    private void addShoppingCart(Long productId, Long userId, int count) {
-        ShoppingCartDao shoppingCartDao = new ShoppingCartDao();
-        shoppingCartDao.add(productId, userId, count);
     }
 }

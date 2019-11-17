@@ -5,8 +5,16 @@
 
 <mapper namespace="org.mybatis.practice.mapper.OrderMapper">
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        insert into orders(user_id, status)
-        values (#{userId}, #{status})
+        <choose>
+            <when test="createdAt != null">
+                insert into orders(user_id, status, created_at)
+                values (#{userId}, #{status}, #{createdAt})
+            </when>
+            <otherwise>
+                insert into orders(user_id, status)
+                values (#{userId}, #{status})
+            </otherwise>
+        </choose>
     </insert>
 
     <insert id="insertItems" useGeneratedKeys="true" keyProperty="id">
@@ -52,4 +60,10 @@
             </association>
         </collection>
     </resultMap>
+
+    <update id="updateStatus">
+        update orders
+        set status=#{status}
+        where id = #{orderId}
+    </update>
 </mapper>

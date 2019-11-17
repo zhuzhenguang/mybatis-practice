@@ -1,5 +1,9 @@
 package org.mybatis.practice.entity;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -13,9 +17,11 @@ public class Order {
     private User user;
 
     public Order() {
+        items = new ArrayList<>();
     }
 
     public Order(Long userId) {
+        this();
         this.userId = userId;
         this.status = OrderStatus.Unpaid;
     }
@@ -70,5 +76,12 @@ public class Order {
 
     public Double totalPrice() {
         return items.stream().mapToDouble(item -> item.getProduct().getPrice() * item.getCount()).sum();
+    }
+
+    public boolean unPaidWithin(int minutes) {
+        LocalDateTime createdTime = Instant.ofEpochMilli(createdAt.getTime())
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+        return status == OrderStatus.Unpaid && LocalDateTime.now().minusMinutes(minutes).isAfter(createdTime);
     }
 }
