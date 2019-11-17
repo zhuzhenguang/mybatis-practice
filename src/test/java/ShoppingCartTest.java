@@ -7,13 +7,13 @@ import org.mybatis.practice.entity.ShoppingCart;
 import org.mybatis.practice.entity.User;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 public class ShoppingCartTest extends TestBase {
     @Test
     public void should_add_a_product_to_shopping_cart() {
         Long userId = Login();
-        Long productId = inputProduct();
+        Long productId = inputFruit("苹果");
         ShoppingCartDao shoppingCartDao = new ShoppingCartDao();
 
         shoppingCartDao.add(productId, userId, 2);
@@ -25,6 +25,37 @@ public class ShoppingCartTest extends TestBase {
         assertEquals(Integer.valueOf(2), result.getItems().get(0).getCount());
     }
 
+    @Test
+    public void should_list_products_of_shopping_cart() {
+        Long userId = Login();
+        ShoppingCartDao shoppingCartDao = new ShoppingCartDao();
+        Long appleId = inputFruit("苹果");
+        Long bananaId = inputFruit("香蕉");
+        shoppingCartDao.add(appleId, userId, 1);
+        shoppingCartDao.add(bananaId, userId, 1);
+
+        ShoppingCart result = shoppingCartDao.queryByUserId(userId);
+
+        assertEquals(userId, result.getUserId());
+        assertEquals(2, result.getItems().size());
+        assertEquals(Integer.valueOf(1), result.getItems().get(0).getCount());
+        assertEquals(Integer.valueOf(1), result.getItems().get(1).getCount());
+        assertNotNull(result.getItems().get(0).getCreatedAt());
+        assertNotNull(result.getItems().get(1).getCreatedAt());
+        Product product1 = result.getItems().get(0).getProduct();
+        Product product2 = result.getItems().get(1).getProduct();
+        assertEquals(appleId, product1.getId());
+        assertEquals(bananaId, product2.getId());
+        assertEquals("苹果", product1.getName());
+        assertEquals("香蕉", product2.getName());
+        assertEquals("Food", product1.getCategory());
+        assertEquals("Food", product2.getCategory());
+        assertEquals(Double.valueOf(10), product1.getPrice());
+        assertEquals(Double.valueOf(10), product2.getPrice());
+        assertEquals(Integer.valueOf(1000), product1.getStorage());
+        assertEquals(Integer.valueOf(1000), product2.getStorage());
+    }
+
     private Long Login() {
         UserDao userDao = new UserDao();
         return userDao.registerNewUser(new User(
@@ -34,8 +65,8 @@ public class ShoppingCartTest extends TestBase {
                 "11111111111", true));
     }
 
-    private Long inputProduct() {
+    private Long inputFruit(String name) {
         ProductDao productDao = new ProductDao();
-        return productDao.addNew(new Product("Food", "苹果", 10, 1000));
+        return productDao.addNew(new Product("Food", name, 10, 1000));
     }
 }

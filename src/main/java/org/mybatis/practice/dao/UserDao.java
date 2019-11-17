@@ -11,15 +11,12 @@ public class UserDao extends DaoBase {
     public Long registerNewUser(User user) {
         try (SqlSession session = MybatisFactory.getSession()) {
             UserMapper mapper = session.getMapper(UserMapper.class);
-
             if (mapper.queryByName(user.getName()) != null) {
                 throw new BussinessException("该用户已注册");
             }
-
-            Long id = mapper.insert(user);
+            mapper.insert(user);
             session.commit();
-
-            return id;
+            return user.getId();
         }
     }
 

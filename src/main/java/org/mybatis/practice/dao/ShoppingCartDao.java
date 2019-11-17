@@ -6,6 +6,8 @@ import org.mybatis.practice.entity.ShoppingCart;
 import org.mybatis.practice.entity.ShoppingCartItem;
 import org.mybatis.practice.mapper.ShoppingCartMapper;
 
+import java.util.List;
+
 public class ShoppingCartDao {
     public void add(Long productId, Long userId, int count) {
         try (SqlSession session = MybatisFactory.getSession()) {
@@ -13,8 +15,8 @@ public class ShoppingCartDao {
 
             ShoppingCart shoppingCart = mapper.queryByUserId(userId);
             if (shoppingCart == null) {
-                Long id = mapper.insert(new ShoppingCart(userId));
-                shoppingCart = new ShoppingCart(id, userId);
+                shoppingCart = new ShoppingCart(userId);
+                mapper.insert(shoppingCart);
             }
             mapper.insertItem(new ShoppingCartItem(shoppingCart.getId(), productId, count));
             session.commit();

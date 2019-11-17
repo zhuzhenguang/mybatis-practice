@@ -18,16 +18,25 @@
         select *
         from shopping_carts s
                  left join shopping_cart_items sci on s.id = sci.shopping_cart_id
+                 left join products p on sci.product_id = p.id
         where s.user_id = #{userId}
     </select>
 
     <resultMap id="shoppingCartMap" type="org.mybatis.practice.entity.ShoppingCart">
+        <id property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="createdAt" column="created_at"/>
         <collection property="items" ofType="org.mybatis.practice.entity.ShoppingCartItem">
             <result property="productId" column="product_id"/>
             <result property="createdAt" column="created_at"/>
             <result property="count" column="count"/>
+            <association property="product" javaType="org.mybatis.practice.entity.Product">
+                <id property="id" column="product_id"/>
+                <result property="category" column="category"/>
+                <result property="name" column="name"/>
+                <result property="price" column="price"/>
+                <result property="storage" column="storage"/>
+            </association>
         </collection>
     </resultMap>
 </mapper>

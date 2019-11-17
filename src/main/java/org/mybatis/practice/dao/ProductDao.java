@@ -11,9 +11,9 @@ public class ProductDao {
     public Long addNew(Product product) {
         try (SqlSession session = MybatisFactory.getSession()) {
             ProductMapper mapper = session.getMapper(ProductMapper.class);
-            Long id = mapper.insert(product);
+            mapper.insert(product);
             session.commit();
-            return id;
+            return product.getId();
         }
     }
 

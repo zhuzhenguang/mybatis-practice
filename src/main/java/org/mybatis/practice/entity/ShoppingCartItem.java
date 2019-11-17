@@ -8,6 +8,7 @@ public class ShoppingCartItem {
     private Long productId;
     private Date createdAt;
     private Long shoppingCartId;
+    private Product product;
 
     public ShoppingCartItem() {
     }
@@ -60,5 +61,13 @@ public class ShoppingCartItem {
 
     public void setShoppingCartId(Long shoppingCartId) {
         this.shoppingCartId = shoppingCartId;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }
