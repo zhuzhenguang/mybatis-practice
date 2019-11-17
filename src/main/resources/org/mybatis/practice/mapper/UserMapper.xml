@@ -5,8 +5,8 @@
 
 <mapper namespace="org.mybatis.practice.mapper.UserMapper">
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        insert into users(name, password, email, phone)
-        values (#{name}, #{password}, #{email}, #{phone})
+        insert into users(name, password, email, phone, is_login)
+        values (#{name}, #{password}, #{email}, #{phone}, #{isLogin})
     </insert>
 
     <resultMap id="user" type="org.mybatis.practice.entity.User">
@@ -19,4 +19,10 @@
         from users
         where name = #{name}
     </select>
+
+    <update id="setLogin">
+        update users
+        set is_login=#{param2}
+        where id = #{param1}
+    </update>
 </mapper>

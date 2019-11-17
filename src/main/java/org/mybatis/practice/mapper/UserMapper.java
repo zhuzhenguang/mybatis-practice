@@ -6,4 +6,6 @@ public interface UserMapper {
     Long insert(User user);
 
     User queryByName(String name);
+
+    void setLogin(Long userId, Boolean isLogin);
 }

@@ -8,4 +8,6 @@ abstract class DaoBase {
         SqlSession session = MybatisFactory.getSession();
         return session.getMapper(mapperClass);
     }
+
+
 }

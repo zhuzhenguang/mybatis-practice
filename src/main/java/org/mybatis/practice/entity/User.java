@@ -19,6 +19,12 @@ public class User {
         this.password = password;
         this.email = email;
         this.phone = phone;
+        this.isLogin = false;
+    }
+
+    public User(String name, String password, String email, String phone, Boolean isLogin) {
+        this(name, password, email, phone);
+        this.isLogin = isLogin;
     }
 
     public Long getId() {
