@@ -1,0 +1,30 @@
+package org.mybatis.practice.dao;
+
+import org.apache.ibatis.session.SqlSession;
+import org.mybatis.practice.MybatisFactory;
+import org.mybatis.practice.entity.ShoppingCart;
+import org.mybatis.practice.entity.ShoppingCartItem;
+import org.mybatis.practice.mapper.ShoppingCartMapper;
+
+public class ShoppingCartDao {
+    public void add(Long productId, Long userId, int count) {
+        try (SqlSession session = MybatisFactory.getSession()) {
+            ShoppingCartMapper mapper = session.getMapper(ShoppingCartMapper.class);
+
+            ShoppingCart shoppingCart = mapper.queryByUserId(userId);
+            if (shoppingCart == null) {
+                Long id = mapper.insert(new ShoppingCart(userId));
+                shoppingCart = new ShoppingCart(id, userId);
+            }
+            mapper.insertItem(new ShoppingCartItem(shoppingCart.getId(), productId, count));
+            session.commit();
+        }
+    }
+
+    public ShoppingCart queryByUserId(Long userId) {
+        try (SqlSession session = MybatisFactory.getSession()) {
+            ShoppingCartMapper mapper = session.getMapper(ShoppingCartMapper.class);
+            return mapper.queryByUserId(userId);
+        }
+    }
+}

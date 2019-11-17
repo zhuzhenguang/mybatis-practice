@@ -17,5 +17,6 @@
     <mappers>
         <mapper resource="org/mybatis/practice/mapper/UserMapper.xml"/>
         <mapper resource="org/mybatis/practice/mapper/ProductMapper.xml"/>
+        <mapper resource="org/mybatis/practice/mapper/ShoppingCartMapper.xml"/>
     </mappers>
 </configuration>

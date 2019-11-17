@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.mybatis.practice.mapper.ShoppingCartMapper">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into shopping_carts(user_id)
+        values (#{userId})
+    </insert>
+
+    <insert id="insertItem" useGeneratedKeys="true" keyProperty="id">
+        insert into shopping_cart_items(shopping_cart_id, product_id, count)
+        values (#{shoppingCartId}, #{productId}, #{count})
+    </insert>
+
+    <select id="queryByUserId" resultMap="shoppingCartMap">
+        select *
+        from shopping_carts s
+                 left join shopping_cart_items sci on s.id = sci.shopping_cart_id
+        where s.user_id = #{userId}
+    </select>
+
+    <resultMap id="shoppingCartMap" type="org.mybatis.practice.entity.ShoppingCart">
+        <result property="userId" column="user_id"/>
+        <result property="createdAt" column="created_at"/>
+        <collection property="items" ofType="org.mybatis.practice.entity.ShoppingCartItem">
+            <result property="productId" column="product_id"/>
+            <result property="createdAt" column="created_at"/>
+            <result property="count" column="count"/>
+        </collection>
+    </resultMap>
+</mapper>

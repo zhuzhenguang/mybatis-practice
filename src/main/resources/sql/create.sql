@@ -10,6 +10,8 @@ create table order_items
     id bigint not null
         primary key AUTO_INCREMENT,
     product_id bigint null,
+    order_id bigint,
+    count int,
     created_at datetime default CURRENT_TIMESTAMP null
 );
 
@@ -39,6 +41,7 @@ create table shopping_cart_items
         primary key AUTO_INCREMENT,
     count int null,
     product_id bigint null,
+    shopping_cart_id bigint,
     created_at datetime default CURRENT_TIMESTAMP null
 );
 

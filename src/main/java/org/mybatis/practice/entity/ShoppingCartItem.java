@@ -7,6 +7,20 @@ public class ShoppingCartItem {
     private Integer count;
     private Long productId;
     private Date createdAt;
+    private Long shoppingCartId;
+
+    public ShoppingCartItem() {
+    }
+
+    public ShoppingCartItem(Long productId, int count) {
+        this.productId = productId;
+        this.count = count;
+    }
+
+    public ShoppingCartItem(Long shoppingCartId, Long productId, int count) {
+        this(productId, count);
+        this.shoppingCartId = shoppingCartId;
+    }
 
     public Long getId() {
         return id;
@@ -38,5 +52,13 @@ public class ShoppingCartItem {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Long getShoppingCartId() {
+        return shoppingCartId;
+    }
+
+    public void setShoppingCartId(Long shoppingCartId) {
+        this.shoppingCartId = shoppingCartId;
     }
 }
