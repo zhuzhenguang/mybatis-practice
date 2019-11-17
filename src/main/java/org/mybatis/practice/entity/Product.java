@@ -20,6 +20,11 @@ public class Product {
         this.storage = storage;
     }
 
+    public Product(Long id, String category, String name, double price, int storage) {
+        this(category, name, price, storage);
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }
