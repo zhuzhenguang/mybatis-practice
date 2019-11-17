@@ -56,4 +56,19 @@ public class UserTest extends TestBase {
         User result = userDao.queryUser("Ming");
         assertFalse(result.getLogin());
     }
+
+    @Test
+    public void should_delete_user() {
+        UserDao userDao = new UserDao();
+        Long userId = userDao.registerNewUser(new User(
+                "Ming",
+                "123",
+                "ming@sohu.com",
+                "11111111111"));
+
+        userDao.delete(userId);
+
+        User result = userDao.queryUser("Ming");
+        assertNull(result);
+    }
 }

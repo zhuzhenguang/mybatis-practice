@@ -8,4 +8,6 @@ public interface UserMapper {
     User queryByName(String name);
 
     void setLogin(Long userId, Boolean isLogin);
+
+    void delete(Long userId);
 }

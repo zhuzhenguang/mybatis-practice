@@ -25,4 +25,10 @@
         set is_login=#{param2}
         where id = #{param1}
     </update>
+
+    <delete id="delete">
+        delete
+        from users
+        where id = #{userId}
+    </delete>
 </mapper>

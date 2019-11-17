@@ -38,4 +38,12 @@ public class UserDao extends DaoBase {
         }
 
     }
+
+    public void delete(Long userId) {
+        try (SqlSession session = MybatisFactory.getSession()) {
+            UserMapper mapper = session.getMapper(UserMapper.class);
+            mapper.delete(userId);
+            session.commit();
+        }
+    }
 }
