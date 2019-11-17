@@ -111,6 +111,44 @@ public class OrderTest extends TestBase {
         assertEquals(OrderStatus.Unpaid, result.getStatus());
     }
 
+    @Test
+    public void should_list_all_orders() {
+        OrderDao orderDao = new OrderDao();
+        Long userId = Login();
+        Long appleId = inputProduct("苹果");
+        Long bananaId = inputProduct("香蕉");
+        orderDao.createOrder(new Order(userId), Collections.singletonList(new OrderItem(appleId, 2)));
+        orderDao.createOrder(new Order(userId), Collections.singletonList(new OrderItem(bananaId, 3)));
+
+        List<Order> orders = orderDao.queryByUser(userId);
+
+        assertEquals(2, orders.size());
+        Order order1 = orders.get(0);
+        assertEquals(OrderStatus.Unpaid, order1.getStatus());
+        assertNotNull(order1.getCreatedAt());
+        assertEquals(Double.valueOf(20), order1.totalPrice());
+        User user1 = order1.getUser();
+        assertEquals("Ming", user1.getName());
+        assertEquals(1, order1.getItems().size());
+        OrderItem orderItem1 = order1.getItems().get(0);
+        assertEquals(Integer.valueOf(2), orderItem1.getCount());
+        assertEquals("苹果", orderItem1.getProduct().getName());
+        assertEquals(appleId, orderItem1.getProduct().getId());
+        assertEquals(Double.valueOf(10), orderItem1.getProduct().getPrice());
+        Order order2 = orders.get(1);
+        assertEquals(OrderStatus.Unpaid, order2.getStatus());
+        assertNotNull(order2.getCreatedAt());
+        assertEquals(Double.valueOf(30), order2.totalPrice());
+        User user2 = order2.getUser();
+        assertEquals("Ming", user2.getName());
+        assertEquals(1, order2.getItems().size());
+        OrderItem orderItem2 = order2.getItems().get(0);
+        assertEquals(Integer.valueOf(3), orderItem2.getCount());
+        assertEquals("香蕉", orderItem2.getProduct().getName());
+        assertEquals(bananaId, orderItem2.getProduct().getId());
+        assertEquals(Double.valueOf(10), orderItem2.getProduct().getPrice());
+    }
+
     private Date createDateMinsAgo(int minutes) {
         return Date.from(LocalDateTime.now().minusMinutes(minutes).atZone(ZoneId.systemDefault()).toInstant());
     }

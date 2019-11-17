@@ -15,4 +15,6 @@ public interface OrderMapper {
     Order queryById(Long id);
 
     void updateStatus(@Param("orderId") Long orderId, @Param("status") OrderStatus status);
+
+    List<Order> queryByUser(Long userId);
 }

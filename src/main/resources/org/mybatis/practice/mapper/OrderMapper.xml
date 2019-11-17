@@ -42,6 +42,25 @@
         where s.id = #{id}
     </select>
 
+    <select id="queryByUser" resultMap="orderMap">
+        select s.id     id,
+               s.status,
+               s.created_at,
+               u.id     userId,
+               u.name   userName,
+               oi.id    itemId,
+               oi.count itemCount,
+               p.id     productId,
+               p.name   productName,
+               p.price  productPrice
+        from orders s
+                 left join order_items oi on s.id = oi.order_id
+                 left join users u on s.user_id = u.id
+                 left join products p on oi.product_id = p.id
+        where s.user_id = #{userId}
+    </select>
+
+
     <resultMap id="orderMap" type="org.mybatis.practice.entity.Order">
         <id property="id" column="id"/>
         <result property="status" column="status"/>

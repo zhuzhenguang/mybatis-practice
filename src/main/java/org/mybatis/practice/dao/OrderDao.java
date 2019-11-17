@@ -58,4 +58,11 @@ public class OrderDao {
             session.commit();
         }
     }
+
+    public List<Order> queryByUser(Long userId) {
+        try (SqlSession session = MybatisFactory.getSession()) {
+            OrderMapper mapper = session.getMapper(OrderMapper.class);
+            return mapper.queryByUser(userId);
+        }
+    }
 }
