@@ -20,6 +20,11 @@
         where name = #{name}
     </select>
 
+    <select id="listAll" resultMap="user">
+        select *
+        from users;
+    </select>
+
     <update id="setLogin">
         update users
         set is_login=#{param2}

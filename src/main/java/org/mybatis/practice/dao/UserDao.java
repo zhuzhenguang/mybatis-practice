@@ -5,12 +5,20 @@ import org.mybatis.practice.MybatisFactory;
 import org.mybatis.practice.entity.User;
 import org.mybatis.practice.mapper.UserMapper;
 
+import java.util.List;
+
 public class UserDao extends DaoBase {
     public Long registerNewUser(User user) {
         try (SqlSession session = MybatisFactory.getSession()) {
             UserMapper mapper = session.getMapper(UserMapper.class);
+
+            if (mapper.queryByName(user.getName()) != null) {
+                throw new BussinessException("该用户已注册");
+            }
+
             Long id = mapper.insert(user);
             session.commit();
+
             return id;
         }
     }
@@ -44,6 +52,13 @@ public class UserDao extends DaoBase {
             UserMapper mapper = session.getMapper(UserMapper.class);
             mapper.delete(userId);
             session.commit();
+        }
+    }
+
+    public List<User> listAll() {
+        try (SqlSession session = MybatisFactory.getSession()) {
+            UserMapper mapper = session.getMapper(UserMapper.class);
+            return mapper.listAll();
         }
     }
 }
