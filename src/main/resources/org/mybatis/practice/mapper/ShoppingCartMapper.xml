@@ -26,7 +26,8 @@
         <id property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="createdAt" column="created_at"/>
-        <collection property="items" ofType="org.mybatis.practice.entity.ShoppingCartItem">
+        <collection property="items" ofType="org.mybatis.practice.entity.ShoppingCartItem" notNullColumn="product_id">
+            <id property="id" column="id"/>
             <result property="productId" column="product_id"/>
             <result property="createdAt" column="created_at"/>
             <result property="count" column="count"/>
@@ -39,4 +40,16 @@
             </association>
         </collection>
     </resultMap>
+
+    <update id="updateCount">
+        update shopping_cart_items
+        set count=#{param2}
+        where id = #{param1}
+    </update>
+
+    <delete id="deleteItem">
+        delete
+        from shopping_cart_items
+        where id = #{itemId}
+    </delete>
 </mapper>

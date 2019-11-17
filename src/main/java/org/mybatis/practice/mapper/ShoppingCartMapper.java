@@ -9,4 +9,8 @@ public interface ShoppingCartMapper {
     Long insert(ShoppingCart shoppingCart);
 
     void insertItem(ShoppingCartItem item);
+
+    void updateCount(Long itemId, int count);
+
+    void deleteItem(Long itemId);
 }

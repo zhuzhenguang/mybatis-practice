@@ -1,5 +1,6 @@
 package org.mybatis.practice.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,13 +11,16 @@ public class ShoppingCart {
     private List<ShoppingCartItem> items;
 
     public ShoppingCart() {
+        items = new ArrayList<>();
     }
 
     public ShoppingCart(Long userId) {
+        this();
         this.userId = userId;
     }
 
     public ShoppingCart(Long id, Long userId) {
+        this();
         this.id = id;
         this.userId = userId;
     }

@@ -4,7 +4,10 @@ import org.mybatis.practice.dao.ShoppingCartDao;
 import org.mybatis.practice.dao.UserDao;
 import org.mybatis.practice.entity.Product;
 import org.mybatis.practice.entity.ShoppingCart;
+import org.mybatis.practice.entity.ShoppingCartItem;
 import org.mybatis.practice.entity.User;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -54,6 +57,34 @@ public class ShoppingCartTest extends TestBase {
         assertEquals(Double.valueOf(10), product2.getPrice());
         assertEquals(Integer.valueOf(1000), product1.getStorage());
         assertEquals(Integer.valueOf(1000), product2.getStorage());
+    }
+
+    @Test
+    public void should_change_count_of_items_in_shopping_cart() {
+        Long userId = Login();
+        Long productId = inputFruit("苹果");
+        ShoppingCartDao shoppingCartDao = new ShoppingCartDao();
+        shoppingCartDao.add(productId, userId, 2);
+        ShoppingCartItem itemToChange = shoppingCartDao.queryByUserId(userId).getItems().get(0);
+
+        shoppingCartDao.changeCount(itemToChange.getId(), 8);
+
+        ShoppingCartItem result = shoppingCartDao.queryByUserId(userId).getItems().get(0);
+        assertEquals(Integer.valueOf(8), result.getCount());
+    }
+
+    @Test
+    public void should_remove_item_from_shopping_cart() {
+        Long userId = Login();
+        Long productId = inputFruit("苹果");
+        ShoppingCartDao shoppingCartDao = new ShoppingCartDao();
+        shoppingCartDao.add(productId, userId, 2);
+        ShoppingCartItem itemToDelete = shoppingCartDao.queryByUserId(userId).getItems().get(0);
+
+        shoppingCartDao.deleteItem(itemToDelete.getId());
+
+        List<ShoppingCartItem> result = shoppingCartDao.queryByUserId(userId).getItems();
+        assertEquals(0, result.size());
     }
 
     private Long Login() {

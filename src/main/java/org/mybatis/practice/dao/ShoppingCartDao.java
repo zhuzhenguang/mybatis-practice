@@ -29,4 +29,20 @@ public class ShoppingCartDao {
             return mapper.queryByUserId(userId);
         }
     }
+
+    public void changeCount(Long itemToChangeId, int count) {
+        try (SqlSession session = MybatisFactory.getSession()) {
+            ShoppingCartMapper mapper = session.getMapper(ShoppingCartMapper.class);
+            mapper.updateCount(itemToChangeId, count);
+            session.commit();
+        }
+    }
+
+    public void deleteItem(Long itemToDeleteId) {
+        try (SqlSession session = MybatisFactory.getSession()) {
+            ShoppingCartMapper mapper = session.getMapper(ShoppingCartMapper.class);
+            mapper.deleteItem(itemToDeleteId);
+            session.commit();
+        }
+    }
 }
